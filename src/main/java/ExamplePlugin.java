@@ -8,13 +8,14 @@ import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @PluginDescriptor(
 	name = "Example plugin",
 	description = "Example on how to have an external plugin support our api additions",
-	type = "external"
+	type = PluginType.EXTERNAL
 )
 public class ExamplePlugin extends Plugin
 {
