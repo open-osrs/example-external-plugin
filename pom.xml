@@ -14,17 +14,24 @@
 
 	<repositories>
 		<repository>
-			<id>RuneLit</id>
-			<name>RuneLit</name>
-			<url>https://raw.githubusercontent.com/runelite-extended/maven-repo/master</url>
+			<id>RuneLitePlus</id>
+			<name>RuneLitePlus</name>
+			<url>https://nexus.runelitepl.us/repository/runelite</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
 		<dependency>
-			<groupId>net.runeliteplus</groupId>
+			<groupId>net.runelite</groupId>
 			<artifactId>client</artifactId>
-			<version>2.0.4</version>
+			<version><!--put version here, ie: 1.5.32-SNAPSHOT--></version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.runelite</groupId>
+			<artifactId>runelite-api</artifactId>
+			<version><!--put version here, ie: 1.5.32-SNAPSHOT--></version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
