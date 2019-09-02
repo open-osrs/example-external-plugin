@@ -16,7 +16,7 @@
 		<repository>
 			<id>RuneLitePlus</id>
 			<name>RuneLitePlus</name>
-			<url>https://nexus.runelitepl.us/repository/runelite</url>
+			<url>https://nexus.thatgamerblue.com/repository/runelite</url>
 		</repository>
 	</repositories>
 
