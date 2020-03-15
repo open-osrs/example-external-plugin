@@ -12,6 +12,12 @@ project.extra["GithubUrl"] = "http://github.com/<INSERT NAME>/<INSERT REPOSITORY
 
 apply<BootstrapPlugin>()
 
+allprojects {
+    repositories {
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
 subprojects {
     group = "com.example"
 
@@ -28,7 +34,9 @@ subprojects {
 
         exclusiveContent {
             forRepository {
-                mavenLocal()
+                maven {
+                    url = uri("https://jitpack.io")
+                }
             }
             filter {
                 includeGroupByRegex("com\\.openosrs.*")

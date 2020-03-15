@@ -2,9 +2,7 @@
 
 You can use this repository as base for your external plugins, and host it on GitHub to make your external plugins available for everybody through the external manager plugin panel in the OpenOSRS client.
 
-First of all you need to build the client (refer to the steps in this [guide][1])
-After building you need to upload all the artifacts to your local maven repository.
-You can do this within intellij by going to the gradle panel at the right hand side and click on OpenOSRS -> Tasks -> publishing -> publishToMavenLocal
+This pulls down the latest snapshot for OpenOSRS, which is hosted through [jitpack.io](https://jitpack.io). This means you don't need to maintain that locally. This will be changed to an actual version when versioning actually works with OpenOSRS and Jitpack.
 
 In this repository you'll find two examples one is written in kotlin and the other one is written in java.
 Before you start you need to make a couple changes:
