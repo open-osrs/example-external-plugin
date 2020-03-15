@@ -1,5 +1,3 @@
-import ProjectVersions.openosrsVersion
-
 /*
  * Copyright (c) 2019 Owain van Brakel <https://github.com/Owain94>
  * All rights reserved.
@@ -40,8 +38,8 @@ dependencies {
 
     kapt(Libraries.pf4j)
 
-    compileOnly("com.openosrs:runelite-api:$openosrsVersion+")
-    compileOnly("com.openosrs:runelite-client:$openosrsVersion+")
+    implementation("com.github.open-osrs.runelite:runelite-api:-SNAPSHOT")
+    implementation("com.github.open-osrs.runelite:runelite-client:-SNAPSHOT")
 
     compileOnly(Libraries.guice)
     compileOnly(Libraries.javax)
