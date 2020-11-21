@@ -149,8 +149,8 @@ public class DiscordNotifierPlugin extends Plugin {
 		}
 	}
 
-	private CompletableFuture<Void> queueLootNotification(String playerName, String playerIconUrl, int itemId,
-														  int quantity, float rarity, int npcId, int npcCombatLevel, String npcName, String eventName, String webhookUrl)
+	private CompletableFuture<Void> queueAchievementNotification(String playerName, String playerIconUrl, int itemId,
+																 int quantity, float rarity, int npcId, int npcCombatLevel, String npcName, String eventName, String webhookUrl)
 	{
 		Author author = new Author();
 		author.setName(playerName);
@@ -376,16 +376,6 @@ public class DiscordNotifierPlugin extends Plugin {
 		{
 			return "Just got a pet.";
 		}
-	}
-
-	private String getGPValueString(int value)
-	{
-		return "```fix\n" + NumberFormat.getNumberInstance(Locale.US).format(value) + " GP\n```";
-	}
-
-	private String getRarityString(float rarity)
-	{
-		return "```glsl\n# 1/" + (1 / rarity) + " (" + (rarity * 100f) + "%)\n```";
 	}
 
 	private String getPlayerIconUrl()
