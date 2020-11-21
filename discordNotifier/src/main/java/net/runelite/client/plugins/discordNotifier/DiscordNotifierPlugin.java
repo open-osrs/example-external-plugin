@@ -12,40 +12,21 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.client.events.NpcLootReceived;
-import net.runelite.client.game.ItemStack;
 import net.runelite.client.plugins.discordNotifier.discord.Author;
 import net.runelite.client.plugins.discordNotifier.discord.Embed;
 import net.runelite.client.plugins.discordNotifier.discord.Field;
 import net.runelite.client.plugins.discordNotifier.discord.Image;
 import net.runelite.client.plugins.discordNotifier.discord.Webhook;
 import net.runelite.client.ui.DrawManager;
-import net.runelite.client.ui.overlay.OverlayManager;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Provides;
-import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.kit.KitType;
-import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetID;
-import net.runelite.api.widgets.WidgetInfo;
-import net.runelite.api.widgets.WidgetItem;
-import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
-import net.runelite.client.util.Clipboard;
-import net.runelite.client.util.QuantityFormatter;
-
 import javax.inject.Inject;
-import javax.swing.text.NumberFormatter;
-import java.text.NumberFormat;
 import java.util.List;
 import okhttp3.HttpUrl;
 import org.json.JSONObject;
@@ -162,17 +143,17 @@ public class DiscordNotifierPlugin extends Plugin {
 
 		Field rarityField = new Field();
 		rarityField.setName("Rarity");
-		rarityField.setValue(getRarityString(rarity));
+//		rarityField.setValue(getRarityString(rarity));
 		rarityField.setInline(true);
 
 		Field haValueField = new Field();
 		haValueField.setName("HA Value");
-		haValueField.setValue(getGPValueString(itemManager.getItemComposition(itemId).getHaPrice() * quantity));
+//		haValueField.setValue(getGPValueString(itemManager.getItemComposition(itemId).getHaPrice() * quantity));
 		haValueField.setInline(true);
 
 		Field geValueField = new Field();
 		geValueField.setName("GE Value");
-		geValueField.setValue(getGPValueString(itemManager.getItemPrice(itemId) * quantity));
+//		geValueField.setValue(getGPValueString(itemManager.getItemPrice(itemId) * quantity));
 		geValueField.setInline(true);
 
 		Embed embed = new Embed();
@@ -181,7 +162,7 @@ public class DiscordNotifierPlugin extends Plugin {
 
 		Image thumbnail = new Image();
 		CompletableFuture<Void> iconFuture = ApiTool.getInstance()
-			.getIconUrl("item", itemId, itemManager.getItemComposition(itemId).getName()).handle((iconUrl, e) ->
+			.getIconUrl("item", itemId, "name").handle((iconUrl, e) ->
 			{
 				if (e != null)
 				{
@@ -331,12 +312,12 @@ public class DiscordNotifierPlugin extends Plugin {
 	private CompletableFuture<String> getLootNotificationDescription(int itemId, int quantity, int npcId,
 																	 int npcCombatLevel, String npcName, String eventName)
 	{
-		ItemComposition itemComp = itemManager.getItemComposition(itemId);
+//		ItemComposition itemComp = itemManager.getItemComposition(itemId);
 
 		return ApiTool.getInstance().getItem(itemId).thenCompose(itemJson ->
 		{
 			String itemUrl = itemJson.getString("wiki_url");
-			String baseMsg = "Just got " + (quantity > 1 ? quantity + "x " : "") + "[" + itemComp.getName() + "](" + itemUrl
+			String baseMsg = "Just got " + (quantity > 1 ? quantity + "x " : "") + "[" + "](" + itemUrl
 				+ ")";
 
 			if (npcId >= 0)

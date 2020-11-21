@@ -34,6 +34,7 @@ project.extra["PluginProvider"] = "tha23rd"
 dependencies {
     annotationProcessor(Libraries.lombok)
     annotationProcessor(Libraries.slf4j)
+    annotationProcessor(Libraries.pf4j)
 
     compileOnly("org.json:json:20200518")
     compileOnly("com.openosrs:runelite-api:$openosrsVersion+")
@@ -44,7 +45,7 @@ dependencies {
     compileOnly(Libraries.javax)
     compileOnly(Libraries.lombok)
     compileOnly(Libraries.slf4j)
-
+    compileOnly(Libraries.pf4j)
 
 
     implementation("com.squareup.okhttp3:okhttp:3.7.0")
