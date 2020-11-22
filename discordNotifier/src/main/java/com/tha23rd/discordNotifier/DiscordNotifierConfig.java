@@ -41,23 +41,23 @@ public interface DiscordNotifierConfig extends Config {
 	}
 
 	@ConfigItem(
-		keyName = "minrarity",
-		name = "Min NPC Rarity (1/x)",
-		description = "NPC drops more rare than this are posted to Discord"
+		keyName = "minlevel",
+		name = "Min Level",
+		description = "The lowest level to start sending notifications at"
 	)
-	default int minRarity()
+	default int minLevel()
 	{
-		return 64;
+		return 34;
 	}
 
 	@ConfigItem(
-		keyName = "minvalue",
-		name = "Min NPC Value",
-		description = "NPC drops more valuable (GE or HA) than this are posted to Discord"
+		keyName = "interval",
+		name = "Level Interval",
+		description = "The interval at which to send notifications"
 	)
-	default int minValue()
+	default int interval()
 	{
-		return 50000;
+		return 1;
 	}
 
 	@ConfigItem(keyName = "sendscreenshot", name = "Send Screenshot", description = "Whether to send a screenshot")
@@ -66,14 +66,4 @@ public interface DiscordNotifierConfig extends Config {
 		return true;
 	}
 
-	@ConfigItem(
-		keyName = "ignoredkeywords",
-		name = "Ignored Keywords",
-		description = "(NPC drops only) comma-separated list of keywords in item name for items to ignore"
-	)
-	default String ignoredKeywords()
-	{
-		return "grimy,seed";
-	}
-	
 }

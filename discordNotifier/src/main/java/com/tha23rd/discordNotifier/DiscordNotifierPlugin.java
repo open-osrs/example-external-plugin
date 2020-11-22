@@ -112,13 +112,17 @@ public class DiscordNotifierPlugin extends Plugin {
 			List<String> skillLevelArray = parseLevelUpWidget(WidgetInfo.LEVEL_UP_LEVEL, client);
 			if (config.sendScreenshot() && skillLevelArray != null)
 			{
+				// if we don't meet min level and interval reqs, just return to avoid spamming channel
+				if (Integer.parseInt(skillLevelArray.get(1)) < config.minLevel()) {
+					return;
+				}
+				if (Integer.parseInt(skillLevelArray.get(1)) % config.interval() != 0) {
+					return;
+				}
 				// take screenshot
 				CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
 					: CompletableFuture.completedFuture(null);
 				screenshotFuture
-					// Waiting for screenshot before checking pet allows us to wait one frame, in
-					// case pet data is not available yet
-					// TODO: Figure out how to get pet info
 					.thenApply(screenshot -> queueLevelUpNotification(getPlayerName(), getPlayerIconUrl(), skillLevelArray.get(0), Integer.parseInt(skillLevelArray.get(1)))
 						.thenCompose(_v -> screenshot != null ? sendScreenshot(getWebhookUrls(), screenshot)
 							: CompletableFuture.completedFuture(null)))
@@ -289,6 +293,6 @@ public class DiscordNotifierPlugin extends Plugin {
 
 	private String getLevelNameString(String levelName)
 	{
-		return "```glsl\n " + levelName + "\n```";
+		return "```glsl\n# " + levelName + "\n```";
 	}
 }
