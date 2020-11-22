@@ -71,7 +71,7 @@ public class Utils
 			quest += " Quest";
 		}
 
-		return "Quest(" + quest + ')';
+		return quest;
 	}
 
 }

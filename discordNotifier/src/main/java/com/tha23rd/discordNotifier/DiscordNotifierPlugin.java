@@ -1,11 +1,10 @@
 //Created by PluginCreator by ImNo: https://github.com/ImNoOSRS
 package com.tha23rd.discordNotifier;
 
-import com.google.common.collect.ImmutableList;
+import static com.tha23rd.discordNotifier.Utils.parseQuestCompletedWidget;
 import com.tha23rd.discordNotifier.discord.Author;
 import com.tha23rd.discordNotifier.discord.Embed;
 import com.tha23rd.discordNotifier.discord.Field;
-import com.tha23rd.discordNotifier.discord.Image;
 import com.tha23rd.discordNotifier.discord.Webhook;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -13,7 +12,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
@@ -29,13 +27,11 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
 import javax.inject.Inject;
 import java.util.List;
-import okhttp3.HttpUrl;
 import org.json.JSONObject;
 import org.pf4j.Extension;
 
@@ -47,7 +43,7 @@ import org.pf4j.Extension;
 @Extension
 @Slf4j
 public class DiscordNotifierPlugin extends Plugin {
-	// Injects our config
+
 	@Inject
 	private ConfigManager configManager;
 
@@ -92,6 +88,7 @@ public class DiscordNotifierPlugin extends Plugin {
 			case QUEST_COMPLETED_GROUP_ID:
 			{
 				// level up widget gets loaded prior to the text being set, so wait until the next tick
+				System.out.println("GroupID detected: " + groupId);
 				shouldTakeScreenshot = true;
 			}
 		}
@@ -134,17 +131,25 @@ public class DiscordNotifierPlugin extends Plugin {
 			}
 
 		}
-//		else if (client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT) != null)
-//		{
-//			String text = client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT).getText();
-//			fileName = parseQuestCompletedWidget(text);
-//			screenshotSubDir = "Quests";
-//		}
-//
-//		if (fileName != null)
-//		{
-//			takeScreenshot(fileName, screenshotSubDir);
-//		}
+		else if (client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT) != null)
+		{
+			System.out.println("Quest completed and in gametick");
+			String text = client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT).getText();
+			String quest = parseQuestCompletedWidget(text);
+			System.out.println("quest parsed: " + quest);
+			// take screenshot
+			CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
+				: CompletableFuture.completedFuture(null);
+			screenshotFuture
+				.thenApply(screenshot -> queueQuestCompletionNotification(getPlayerName(), getPlayerIconUrl(), quest)
+					.thenCompose(_v -> screenshot != null ? sendScreenshot(getWebhookUrls(), screenshot)
+						: CompletableFuture.completedFuture(null)))
+				.exceptionally(e ->
+				{
+					log.error(String.format("onChatMessage (pet) error: %s", e.getMessage()), e);
+					return null;
+				});
+		}
 	}
 
 	private CompletableFuture<Void> queueLevelUpNotification(String playerName, String playerIconUrl, String skill,
@@ -172,6 +177,34 @@ public class DiscordNotifierPlugin extends Plugin {
 		embed.setAuthor(author);
 		embed.setFields(new Field[] { skillNameField, skillLevelField });
 
+		return CompletableFuture.allOf().thenCompose(_v ->
+		{
+			Webhook webhookData = new Webhook();
+			webhookData.setEmbeds(new Embed[] { embed });
+			return sendWebhookData(getWebhookUrls(), webhookData);
+		});
+	}
+
+	private CompletableFuture<Void> queueQuestCompletionNotification(String playerName, String playerIconUrl, String quest)
+	{
+		System.out.println("Creating quest embed");
+		Author author = new Author();
+		author.setName(playerName);
+
+		if (playerIconUrl != null)
+		{
+			author.setIcon_url(playerIconUrl);
+		}
+
+		Field questNameField = new Field();
+		questNameField.setName("Quest");
+		questNameField.setValue(getLevelNameString(quest));
+		questNameField.setInline(true);
+
+		Embed embed = new Embed();
+		embed.setAuthor(author);
+		embed.setFields(new Field[] { questNameField });
+		System.out.println("embed created");
 		return CompletableFuture.allOf().thenCompose(_v ->
 		{
 			Webhook webhookData = new Webhook();
