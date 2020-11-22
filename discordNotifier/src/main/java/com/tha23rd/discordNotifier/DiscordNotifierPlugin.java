@@ -35,12 +35,15 @@ import javax.inject.Inject;
 import java.util.List;
 import okhttp3.HttpUrl;
 import org.json.JSONObject;
+import org.pf4j.Extension;
+import org.pf4j.ExtensionPoint;
 
 @PluginDescriptor(
 		name = "Achievement Discord Notifier",
 		description = "Notify discord when you do something awesome",
 		type = PluginType.SYSTEM
 )
+@Extension
 @Slf4j
 public class DiscordNotifierPlugin extends Plugin {
 	// Injects our config

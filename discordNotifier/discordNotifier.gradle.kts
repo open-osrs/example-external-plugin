@@ -32,26 +32,32 @@ project.extra["PluginDescription"] = "Notify discord when you do something aweso
 project.extra["PluginProvider"] = "tha23rd"
 
 dependencies {
-    annotationProcessor(Libraries.lombok)
-    annotationProcessor(Libraries.slf4j)
-    annotationProcessor(Libraries.pf4j)
+	annotationProcessor(Libraries.lombok)
+	annotationProcessor(Libraries.slf4j)
+	annotationProcessor(Libraries.pf4j)
 
-    compileOnly(Libraries.json)
-    compileOnly("com.openosrs:runelite-api:$openosrsVersion+")
-    compileOnly("com.openosrs:runelite-client:$openosrsVersion+")
-    compileOnly(Libraries.jsoup)
-
+	compileOnly(Libraries.lombok)
+	compileOnly(Libraries.slf4j)
+	compileOnly(Libraries.pf4j)
     compileOnly(Libraries.guice)
     compileOnly(Libraries.javax)
-    compileOnly(Libraries.lombok)
-    compileOnly(Libraries.slf4j)
-    compileOnly(Libraries.pf4j)
+	compileOnly(Libraries.okhttp)
 
-    implementation(Libraries.okhttp)
+	compileOnly("com.openosrs:runelite-api:$openosrsVersion+")
+	compileOnly("com.openosrs:runelite-client:$openosrsVersion+")
+
+    implementation(Libraries.json)
+    implementation(Libraries.jsoup)
 }
 
 tasks {
 	jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(configurations.runtimeClasspath.get()
+                .map { if (it.isDirectory) it else zipTree(it) })
+        val sourcesMain = sourceSets.main.get()
+        from(sourcesMain.output)
+
 		manifest {
 			attributes(mapOf(
 					"Plugin-Version" to project.version,
