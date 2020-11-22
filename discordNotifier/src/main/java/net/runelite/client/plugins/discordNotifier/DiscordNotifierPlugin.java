@@ -12,6 +12,14 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.util.Text;
+import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
+import static net.runelite.api.widgets.WidgetID.QUEST_COMPLETED_GROUP_ID;
+import net.runelite.api.widgets.WidgetInfo;
+import static net.runelite.client.plugins.discordNotifier.Utils.parseLevelUpWidget;
+import static net.runelite.client.plugins.discordNotifier.Utils.parseQuestCompletedWidget;
 import net.runelite.client.plugins.discordNotifier.discord.Author;
 import net.runelite.client.plugins.discordNotifier.discord.Embed;
 import net.runelite.client.plugins.discordNotifier.discord.Field;
@@ -59,42 +67,12 @@ public class DiscordNotifierPlugin extends Plugin {
 
 	private CompletableFuture<java.awt.Image> queuedScreenshot = null;
 
+	private boolean shouldTakeScreenshot;
+
 	@Provides
 	DiscordNotifierConfig provideConfig(ConfigManager configManager)
 	{
 		return configManager.getConfig(DiscordNotifierConfig.class);
-	}
-
-	@Subscribe
-	public void onChatMessage(ChatMessage event)
-	{
-		String chatMessage = event.getMessage();
-
-		// TODO: filter by sender (e.g. game not player) but for now allow all for
-		// testing
-		if (PET_MESSAGES.stream().anyMatch(chatMessage::contains))
-		{
-			boolean isDuplicate = chatMessage.contains(PET_MESSAGE_DUPLICATE);
-			log.info(String.format("Possible pet: duplicate=%b (%s, %s) %s", isDuplicate, event.getSender(), event.getName(),
-				event.getMessage()));
-
-			CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
-				: CompletableFuture.completedFuture(null);
-
-			screenshotFuture
-				// Waiting for screenshot before checking pet allows us to wait one frame, in
-				// case pet data is not available yet
-				// TODO: Figure out how to get pet info
-				.thenApply(screenshot -> queuePetNotification(getPlayerName(), getPlayerIconUrl(), null, -1, isDuplicate)
-					.thenCompose(_v -> screenshot != null ? sendScreenshot(getWebhookUrls(), screenshot)
-						: CompletableFuture.completedFuture(null)))
-				.exceptionally(e ->
-				{
-					log.error(String.format("onChatMessage (pet) error: %s", e.getMessage()), e);
-					log.error(event.toString());
-					return null;
-				});
-		}
 	}
 
 	private boolean shouldBeIgnored(String itemName)
@@ -192,8 +170,70 @@ public class DiscordNotifierPlugin extends Plugin {
 		});
 	}
 
-	private CompletableFuture<Void> queuePetNotification(String playerName, String playerIconUrl, String petName,
-														 int rarity, boolean isDuplicate)
+	@Subscribe
+	public void onWidgetLoaded(WidgetLoaded event)
+	{
+		int groupId = event.getGroupId();
+		switch (groupId)
+		{
+			case LEVEL_UP_GROUP_ID:
+			case QUEST_COMPLETED_GROUP_ID:
+			{
+				// level up widget gets loaded prior to the text being set, so wait until the next tick
+				shouldTakeScreenshot = true;
+			}
+		}
+	}
+
+	@Subscribe
+	public void onGameTick(GameTick event)
+	{
+		if (!shouldTakeScreenshot)
+		{
+			return;
+		}
+
+		shouldTakeScreenshot = false;
+
+		if (client.getWidget(WidgetInfo.LEVEL_UP_LEVEL) != null)
+		{
+			List<String> skillLevelArray = parseLevelUpWidget(WidgetInfo.LEVEL_UP_LEVEL, client);
+			if (config.sendScreenshot() && skillLevelArray != null)
+			{
+				// take screenshot
+				CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
+					: CompletableFuture.completedFuture(null);
+
+				screenshotFuture
+					// Waiting for screenshot before checking pet allows us to wait one frame, in
+					// case pet data is not available yet
+					// TODO: Figure out how to get pet info
+					.thenApply(screenshot -> queueLevelUpNotification(getPlayerName(), getPlayerIconUrl(), skillLevelArray.get(0), Integer.parseInt(skillLevelArray.get(1)))
+						.thenCompose(_v -> screenshot != null ? sendScreenshot(getWebhookUrls(), screenshot)
+							: CompletableFuture.completedFuture(null)))
+					.exceptionally(e ->
+					{
+						log.error(String.format("onChatMessage (pet) error: %s", e.getMessage()), e);
+						return null;
+					});
+			}
+
+		}
+//		else if (client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT) != null)
+//		{
+//			String text = client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT).getText();
+//			fileName = parseQuestCompletedWidget(text);
+//			screenshotSubDir = "Quests";
+//		}
+//
+//		if (fileName != null)
+//		{
+//			takeScreenshot(fileName, screenshotSubDir);
+//		}
+	}
+
+	private CompletableFuture<Void> queueLevelUpNotification(String playerName, String playerIconUrl, String skill,
+														 int skillLevel)
 	{
 		Author author = new Author();
 		author.setName(playerName);
@@ -203,21 +243,21 @@ public class DiscordNotifierPlugin extends Plugin {
 			author.setIcon_url(playerIconUrl);
 		}
 
-		/*
-		 * Field rarityField = new Field(); rarityField.setName("Rarity");
-		 * rarityField.setValue(getRarityString(rarity)); rarityField.setInline(true);
-		 */
+		Field rarityField = new Field();
+		rarityField.setName("Skill");
+		rarityField.setValue(skill);
+		rarityField.setInline(true);
+
+		Field haValueField = new Field();
+		haValueField.setName("Skill Level");
+		haValueField.setValue(skillLevel + "");
+		haValueField.setInline(true);
+
 
 		Embed embed = new Embed();
 		embed.setAuthor(author);
 		embed.setFields(new Field[] { /* rarityField */ });
-		embed.setDescription(getPetNotificationDescription(isDuplicate));
 
-		/*
-		 * Image thumbnail = new Image(); CompletableFuture<Void> iconFuture =
-		 * ApiTool.getInstance().getIconUrl("pet", -1, petName).thenAccept(iconUrl -> {
-		 * thumbnail.setUrl(iconUrl); embed.setThumbnail(thumbnail); });
-		 */
 
 		return CompletableFuture.allOf().thenCompose(_v ->
 		{
