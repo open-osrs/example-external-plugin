@@ -25,8 +25,6 @@
 
 rootProject.name = "external plugins example"
 
-include(":kotlinexample")
-include(":javaexample")
 include(":discordNotifier")
 
 for (project in rootProject.children) {

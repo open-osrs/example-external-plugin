@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.discordNotifier;
+package com.tha23rd.discordNotifier;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Arrays;

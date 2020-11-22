@@ -25,16 +25,16 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
-package net.runelite.client.plugins.discordNotifier.discord;
+package com.tha23rd.discordNotifier.discord;
 
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @NoArgsConstructor
-public class Webhook extends Object
+public class Image extends Object
 {
   @Getter
   @Setter
-  private Embed[] embeds;
+  private String url;
 }

@@ -1,30 +1,26 @@
 //Created by PluginCreator by ImNo: https://github.com/ImNoOSRS 
-package net.runelite.client.plugins.discordNotifier;
+package com.tha23rd.discordNotifier;
 
 import com.google.common.collect.ImmutableList;
+import com.tha23rd.discordNotifier.discord.Author;
+import com.tha23rd.discordNotifier.discord.Embed;
+import com.tha23rd.discordNotifier.discord.Field;
+import com.tha23rd.discordNotifier.discord.Image;
+import com.tha23rd.discordNotifier.discord.Webhook;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
-import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
-import net.runelite.api.util.Text;
 import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
 import static net.runelite.api.widgets.WidgetID.QUEST_COMPLETED_GROUP_ID;
 import net.runelite.api.widgets.WidgetInfo;
-import static net.runelite.client.plugins.discordNotifier.Utils.parseLevelUpWidget;
-import static net.runelite.client.plugins.discordNotifier.Utils.parseQuestCompletedWidget;
-import net.runelite.client.plugins.discordNotifier.discord.Author;
-import net.runelite.client.plugins.discordNotifier.discord.Embed;
-import net.runelite.client.plugins.discordNotifier.discord.Field;
-import net.runelite.client.plugins.discordNotifier.discord.Image;
-import net.runelite.client.plugins.discordNotifier.discord.Webhook;
+import static com.tha23rd.discordNotifier.Utils.parseLevelUpWidget;
 import net.runelite.client.ui.DrawManager;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;

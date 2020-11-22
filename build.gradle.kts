@@ -13,7 +13,7 @@ project.extra["GithubUrl"] = "http://github.com/tha23rd/example-external-plugin"
 apply<BootstrapPlugin>()
 
 subprojects {
-    group = "com.example"
+    group = "com.tha23rd"
 
     project.extra["PluginProvider"] = "tha23rd"
     project.extra["ProjectSupportUrl"] = ""
