@@ -1,4 +1,4 @@
-//Created by PluginCreator by ImNo: https://github.com/ImNoOSRS 
+//Created by PluginCreator by ImNo: https://github.com/ImNoOSRS
 package com.tha23rd.discordNotifier;
 
 import com.google.common.collect.ImmutableList;
@@ -9,8 +9,10 @@ import com.tha23rd.discordNotifier.discord.Image;
 import com.tha23rd.discordNotifier.discord.Webhook;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -36,12 +38,11 @@ import java.util.List;
 import okhttp3.HttpUrl;
 import org.json.JSONObject;
 import org.pf4j.Extension;
-import org.pf4j.ExtensionPoint;
 
 @PluginDescriptor(
-		name = "Achievement Discord Notifier",
-		description = "Notify discord when you do something awesome",
-		type = PluginType.SYSTEM
+	name = "Achievement Discord Notifier",
+	description = "Notify discord when you do something awesome",
+	type = PluginType.UTILITY
 )
 @Extension
 @Slf4j
@@ -49,18 +50,12 @@ public class DiscordNotifierPlugin extends Plugin {
 	// Injects our config
 	@Inject
 	private ConfigManager configManager;
+
 	@Inject
 	private DiscordNotifierConfig config;
-	private static final String PET_MESSAGE_DUPLICATE = "You have a funny feeling like you would have been followed";
-	private static final ImmutableList<String> PET_MESSAGES = ImmutableList.of(
-		"You have a funny feeling like you're being followed", "You feel something weird sneaking into your backpack",
-		"You have a funny feeling like you would have been followed", PET_MESSAGE_DUPLICATE);
 
 	@Inject
 	private Client client;
-
-	@Inject
-	private ItemManager itemManager;
 
 	@Inject
 	private DrawManager drawManager;
@@ -85,102 +80,6 @@ public class DiscordNotifierPlugin extends Plugin {
 	public void shutDown() throws Exception
 	{
 
-	}
-
-
-	private boolean shouldBeIgnored(String itemName)
-	{
-		String lowerName = itemName.toLowerCase();
-		List<String> keywords = Arrays.asList(config.ignoredKeywords().split(","));
-		return keywords.stream().anyMatch(key -> key.length() > 0 && lowerName.contains(key.toLowerCase()));
-	}
-
-	private void queueScreenshot()
-	{
-		if (queuedScreenshot == null && config.sendScreenshot())
-		{
-			queuedScreenshot = getScreenshot();
-		}
-	}
-
-	private void sendScreenshotIfSupposedTo()
-	{
-		if (queuedScreenshot != null && config.sendScreenshot())
-		{
-			CompletableFuture<java.awt.Image> copy = queuedScreenshot;
-			queuedScreenshot = null;
-			copy.thenAccept(screenshot -> sendScreenshot(getWebhookUrls(), screenshot)).handle((v, e) ->
-			{
-				if (e != null)
-				{
-					log.error(String.format("sendScreenshotIfSupposedTo error: %s", e.getMessage()), e);
-				}
-				queuedScreenshot = null;
-				return null;
-			});
-		}
-	}
-
-	private CompletableFuture<Void> queueAchievementNotification(String playerName, String playerIconUrl, int itemId,
-																 int quantity, float rarity, int npcId, int npcCombatLevel, String npcName, String eventName, String webhookUrl)
-	{
-		Author author = new Author();
-		author.setName(playerName);
-
-		if (playerIconUrl != null)
-		{
-			author.setIcon_url(playerIconUrl);
-		}
-
-		Field rarityField = new Field();
-		rarityField.setName("Rarity");
-//		rarityField.setValue(getRarityString(rarity));
-		rarityField.setInline(true);
-
-		Field haValueField = new Field();
-		haValueField.setName("HA Value");
-//		haValueField.setValue(getGPValueString(itemManager.getItemComposition(itemId).getHaPrice() * quantity));
-		haValueField.setInline(true);
-
-		Field geValueField = new Field();
-		geValueField.setName("GE Value");
-//		geValueField.setValue(getGPValueString(itemManager.getItemPrice(itemId) * quantity));
-		geValueField.setInline(true);
-
-		Embed embed = new Embed();
-		embed.setAuthor(author);
-		embed.setFields(new Field[] { rarityField, haValueField, geValueField });
-
-		Image thumbnail = new Image();
-		CompletableFuture<Void> iconFuture = ApiTool.getInstance()
-			.getIconUrl("item", itemId, "name").handle((iconUrl, e) ->
-			{
-				if (e != null)
-				{
-					log.error(String.format("queueLootNotification (icon %d) error: %s", itemId, e.getMessage()), e);
-				}
-				thumbnail.setUrl(iconUrl);
-				embed.setThumbnail(thumbnail);
-				return null;
-			});
-
-		CompletableFuture<Void> descFuture = getLootNotificationDescription(itemId, quantity, npcId, npcCombatLevel,
-			npcName, eventName).handle((notifDesc, e) ->
-		{
-			if (e != null)
-			{
-				log.error(String.format("queueLootNotification (desc %d) error: %s", itemId, e.getMessage()), e);
-			}
-			embed.setDescription(notifDesc);
-			return null;
-		});
-
-		return CompletableFuture.allOf(descFuture, iconFuture).thenCompose(_v ->
-		{
-			Webhook webhookData = new Webhook();
-			webhookData.setEmbeds(new Embed[] { embed });
-			return sendWebhookData(getWebhookUrls(), webhookData);
-		});
 	}
 
 	@Subscribe
@@ -216,7 +115,6 @@ public class DiscordNotifierPlugin extends Plugin {
 				// take screenshot
 				CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
 					: CompletableFuture.completedFuture(null);
-
 				screenshotFuture
 					// Waiting for screenshot before checking pet allows us to wait one frame, in
 					// case pet data is not available yet
@@ -246,7 +144,7 @@ public class DiscordNotifierPlugin extends Plugin {
 	}
 
 	private CompletableFuture<Void> queueLevelUpNotification(String playerName, String playerIconUrl, String skill,
-														 int skillLevel)
+															 int skillLevel)
 	{
 		Author author = new Author();
 		author.setName(playerName);
@@ -256,22 +154,20 @@ public class DiscordNotifierPlugin extends Plugin {
 			author.setIcon_url(playerIconUrl);
 		}
 
-		Field skillField = new Field();
-		skillField.setName("Skill");
-		skillField.setValue(skill);
-		skillField.setInline(true);
+		Field skillNameField = new Field();
+		skillNameField.setName("Skill");
+		skillNameField.setValue(getLevelNameString(skill));
+		skillNameField.setInline(true);
 
-		Field levelField = new Field();
-		levelField.setName("Skill Level");
-		levelField.setValue(skillLevel + "");
-		levelField.setInline(true);
-
+		Field skillLevelField = new Field();
+		skillLevelField.setName("Skill Level");
+		skillLevelField.setValue(getLevelNumberString(skillLevel));
+		skillLevelField.setInline(true);
 
 		Embed embed = new Embed();
 		embed.setAuthor(author);
-		embed.setFields(new Field[] { skillField, levelField });
+		embed.setFields(new Field[] { skillNameField, skillLevelField });
 
-		embed.setDescription("Just got " + levelField.getValue() + " " + skillField.getValue() + "!");
 		return CompletableFuture.allOf().thenCompose(_v ->
 		{
 			Webhook webhookData = new Webhook();
@@ -360,58 +256,6 @@ public class DiscordNotifierPlugin extends Plugin {
 		}
 	}
 
-	// TODO: Add Pet notification
-
-	private CompletableFuture<String> getLootNotificationDescription(int itemId, int quantity, int npcId,
-																	 int npcCombatLevel, String npcName, String eventName)
-	{
-//		ItemComposition itemComp = itemManager.getItemComposition(itemId);
-
-		return ApiTool.getInstance().getItem(itemId).thenCompose(itemJson ->
-		{
-			String itemUrl = itemJson.getString("wiki_url");
-			String baseMsg = "Just got " + (quantity > 1 ? quantity + "x " : "") + "[" + "](" + itemUrl
-				+ ")";
-
-			if (npcId >= 0)
-			{
-				return ApiTool.getInstance().getNPC(npcId).thenApply(npcJson ->
-				{
-					String npcUrl = npcJson.getString("wiki_url");
-					String fullMsg = baseMsg + " from lvl " + npcCombatLevel + " [" + npcName + "](" + npcUrl + ")";
-					return fullMsg;
-				}).exceptionally(e ->
-				{
-					log.error("!= NPC info for " + npcId + " (" + e.getMessage() + ")");
-					return baseMsg + " from lvl " + npcCombatLevel + " " + npcName;
-				});
-			}
-			else if (eventName != null)
-			{
-				String eventUrl = HttpUrl.parse("https://oldschool.runescape.wiki/").newBuilder()
-					.addPathSegments("w/Special:Search").addQueryParameter("search", eventName).build().toString();
-				String fullMsg = baseMsg + " from [" + eventName + "](" + eventUrl + ")";
-				return CompletableFuture.completedFuture(fullMsg);
-			}
-			else
-			{
-				return CompletableFuture.completedFuture(baseMsg + " from something");
-			}
-		});
-	}
-
-	private String getPetNotificationDescription(boolean isDuplicate)
-	{
-		if (isDuplicate)
-		{
-			return "Would've gotten a pet, but already has it.";
-		}
-		else
-		{
-			return "Just got a pet.";
-		}
-	}
-
 	private String getPlayerIconUrl()
 	{
 		switch (client.getAccountType())
@@ -436,5 +280,15 @@ public class DiscordNotifierPlugin extends Plugin {
 	{
 		return Arrays.asList(config.webhookUrl().split("\n")).stream().filter(u -> u.length() > 0)
 			.collect(Collectors.toList());
+	}
+
+	private String getLevelNumberString(int value)
+	{
+		return "```fix\n Level: " + NumberFormat.getNumberInstance(Locale.US).format(value) + "\n```";
+	}
+
+	private String getLevelNameString(String levelName)
+	{
+		return "```glsl\n " + levelName + "\n```";
 	}
 }
