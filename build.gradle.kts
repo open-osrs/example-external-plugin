@@ -8,7 +8,7 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "http://github.com/tha23rd/example-external-plugin"
+project.extra["GithubUrl"] = "https://github.com/tha23rd/example-external-plugin"
 
 apply<BootstrapPlugin>()
 

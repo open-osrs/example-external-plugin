@@ -88,7 +88,6 @@ public class DiscordNotifierPlugin extends Plugin {
 			case QUEST_COMPLETED_GROUP_ID:
 			{
 				// level up widget gets loaded prior to the text being set, so wait until the next tick
-				System.out.println("GroupID detected: " + groupId);
 				shouldTakeScreenshot = true;
 			}
 		}
@@ -133,10 +132,8 @@ public class DiscordNotifierPlugin extends Plugin {
 		}
 		else if (client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT) != null)
 		{
-			System.out.println("Quest completed and in gametick");
 			String text = client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT).getText();
 			String quest = parseQuestCompletedWidget(text);
-			System.out.println("quest parsed: " + quest);
 			// take screenshot
 			CompletableFuture<java.awt.Image> screenshotFuture = config.sendScreenshot() ? getScreenshot()
 				: CompletableFuture.completedFuture(null);
@@ -187,7 +184,6 @@ public class DiscordNotifierPlugin extends Plugin {
 
 	private CompletableFuture<Void> queueQuestCompletionNotification(String playerName, String playerIconUrl, String quest)
 	{
-		System.out.println("Creating quest embed");
 		Author author = new Author();
 		author.setName(playerName);
 
@@ -204,7 +200,6 @@ public class DiscordNotifierPlugin extends Plugin {
 		Embed embed = new Embed();
 		embed.setAuthor(author);
 		embed.setFields(new Field[] { questNameField });
-		System.out.println("embed created");
 		return CompletableFuture.allOf().thenCompose(_v ->
 		{
 			Webhook webhookData = new Webhook();
