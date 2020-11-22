@@ -256,22 +256,22 @@ public class DiscordNotifierPlugin extends Plugin {
 			author.setIcon_url(playerIconUrl);
 		}
 
-		Field rarityField = new Field();
-		rarityField.setName("Skill");
-		rarityField.setValue(skill);
-		rarityField.setInline(true);
+		Field skillField = new Field();
+		skillField.setName("Skill");
+		skillField.setValue(skill);
+		skillField.setInline(true);
 
-		Field haValueField = new Field();
-		haValueField.setName("Skill Level");
-		haValueField.setValue(skillLevel + "");
-		haValueField.setInline(true);
+		Field levelField = new Field();
+		levelField.setName("Skill Level");
+		levelField.setValue(skillLevel + "");
+		levelField.setInline(true);
 
 
 		Embed embed = new Embed();
 		embed.setAuthor(author);
-		embed.setFields(new Field[] { /* rarityField */ });
+		embed.setFields(new Field[] { skillField, levelField });
 
-
+		embed.setDescription("Just got " + levelField.getValue() + " " + skillField.getValue() + "!");
 		return CompletableFuture.allOf().thenCompose(_v ->
 		{
 			Webhook webhookData = new Webhook();
