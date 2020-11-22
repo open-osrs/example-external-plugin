@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
@@ -70,6 +71,19 @@ public class DiscordNotifierPlugin extends Plugin {
 	{
 		return configManager.getConfig(DiscordNotifierConfig.class);
 	}
+
+	@Override
+	public void startUp() throws Exception
+	{
+
+	}
+
+	@Override
+	public void shutDown() throws Exception
+	{
+
+	}
+
 
 	private boolean shouldBeIgnored(String itemName)
 	{

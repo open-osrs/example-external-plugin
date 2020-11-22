@@ -25,7 +25,7 @@ import ProjectVersions.openosrsVersion
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "0.0.1"
+version = "0.0.2"
 
 project.extra["PluginName"] = "Achievement Discord Notifier"
 project.extra["PluginDescription"] = "Notify discord when you do something awesome"
@@ -36,10 +36,10 @@ dependencies {
     annotationProcessor(Libraries.slf4j)
     annotationProcessor(Libraries.pf4j)
 
-    compileOnly("org.json:json:20200518")
+    compileOnly(Libraries.json)
     compileOnly("com.openosrs:runelite-api:$openosrsVersion+")
     compileOnly("com.openosrs:runelite-client:$openosrsVersion+")
-    compileOnly("org.jsoup:jsoup:1.13.1")
+    compileOnly(Libraries.jsoup)
 
     compileOnly(Libraries.guice)
     compileOnly(Libraries.javax)
@@ -47,8 +47,7 @@ dependencies {
     compileOnly(Libraries.slf4j)
     compileOnly(Libraries.pf4j)
 
-
-    implementation("com.squareup.okhttp3:okhttp:3.7.0")
+    implementation(Libraries.okhttp)
 }
 
 tasks {

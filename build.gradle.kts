@@ -36,6 +36,7 @@ subprojects {
         }
     }
 
+
     apply<JavaPlugin>()
 
     configure<JavaPluginConvention> {

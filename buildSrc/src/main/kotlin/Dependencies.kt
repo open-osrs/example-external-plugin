@@ -42,5 +42,7 @@ object Libraries {
     const val lombok = "org.projectlombok:lombok:${Versions.lombok}"
     const val pf4j = "org.pf4j:pf4j:${Versions.pf4j}"
     const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"
-
+    const val json = "org.json:json:20200518"
+    const val jsoup = "org.jsoup:jsoup:1.13.1"
+    const val okhttp = "com.squareup.okhttp3:okhttp:3.7.0"
 }
