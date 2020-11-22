@@ -16,6 +16,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
+import net.runelite.api.WorldType;
+import static net.runelite.api.WorldType.LEAGUE;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
 import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
@@ -293,7 +295,11 @@ public class DiscordNotifierPlugin extends Plugin {
 		switch (client.getAccountType())
 		{
 			case IRONMAN:
-				return "https://oldschool.runescape.wiki/images/0/09/Ironman_chat_badge.png";
+				if (client.getWorldType().contains(LEAGUE)) {
+					return "https://oldschool.runescape.wiki/w/Trailblazer_League/Tasks#/media/File:Leagues_II_-_Trailblazer_(3).png";
+				} else {
+					return "https://oldschool.runescape.wiki/images/0/09/Ironman_chat_badge.png";
+				}
 			case HARDCORE_IRONMAN:
 				return "https://oldschool.runescape.wiki/images/b/b8/Hardcore_ironman_chat_badge.png";
 			case ULTIMATE_IRONMAN:
