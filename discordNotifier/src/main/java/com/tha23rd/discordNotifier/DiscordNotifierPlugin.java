@@ -297,7 +297,7 @@ public class DiscordNotifierPlugin extends Plugin {
 		{
 			case IRONMAN:
 				if (client.getWorldType().contains(LEAGUE)) {
-					return "https://cdn.discordapp.com/attachments/573915896309874698/780220263916240896/unknown.png";
+					return "https://i.imgur.com/AUbW7a7.png";
 				} else {
 					return "https://oldschool.runescape.wiki/images/0/09/Ironman_chat_badge.png";
 				}
