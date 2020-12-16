@@ -112,10 +112,11 @@ public class DiscordNotifierPlugin extends Plugin {
 			if (config.sendScreenshot() && skillLevelArray != null)
 			{
 				// if we don't meet min level and interval reqs, just return to avoid spamming channel
-				if (Integer.parseInt(skillLevelArray.get(1)) < config.minLevel()) {
+				int level = Integer.parseInt(skillLevelArray.get(1));
+				if (level < config.minLevel()) {
 					return;
 				}
-				if (Integer.parseInt(skillLevelArray.get(1)) % config.interval() != 0) {
+				if (level != 99 && level % config.interval() != 0) {
 					return;
 				}
 				// take screenshot
