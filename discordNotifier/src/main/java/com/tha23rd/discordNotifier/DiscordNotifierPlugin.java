@@ -16,8 +16,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
-import net.runelite.api.IconID;
-import net.runelite.api.WorldType;
 import static net.runelite.api.WorldType.LEAGUE;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
@@ -32,7 +30,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.PluginType;
 import javax.inject.Inject;
 import java.util.List;
 import org.json.JSONObject;
@@ -41,7 +38,7 @@ import org.pf4j.Extension;
 @PluginDescriptor(
 	name = "Achievement Discord Notifier",
 	description = "Notify discord when you do something awesome",
-	type = PluginType.UTILITY
+	tags = {"utility", "notifier", "discord"}
 )
 @Extension
 @Slf4j
