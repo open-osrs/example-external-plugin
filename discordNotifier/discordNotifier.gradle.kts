@@ -25,7 +25,7 @@ import ProjectVersions.openosrsVersion
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "0.4.0"
+version = "0.0.7"
 
 project.extra["PluginName"] = "Achievement Discord Notifier"
 project.extra["PluginDescription"] = "Notify discord when you do something awesome"
