@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Plugin-Version: 1.1.3
+Plugin-Id: swoodcuttingguild-plugin
+Plugin-Provider: Samler
+Plugin-Dependencies: iutils-plugin
+Plugin-Description: Samler - Woodcutting guild
+Plugin-License: 3-Clause BSD License
+
