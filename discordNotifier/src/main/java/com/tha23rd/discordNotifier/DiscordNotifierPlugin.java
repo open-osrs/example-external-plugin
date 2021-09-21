@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import net.runelite.api.Client;
-import static net.runelite.api.WorldType.LEAGUE;
+import static net.runelite.api.WorldType.SEASONAL;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
 import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
@@ -294,7 +294,7 @@ public class DiscordNotifierPlugin extends Plugin {
 		switch (client.getAccountType())
 		{
 			case IRONMAN:
-				if (client.getWorldType().contains(LEAGUE)) {
+				if (client.getWorldType().contains(SEASONAL)) {
 					return "https://i.imgur.com/AUbW7a7.png";
 				} else {
 					return "https://oldschool.runescape.wiki/images/0/09/Ironman_chat_badge.png";

@@ -24,7 +24,7 @@
  */
 
 object ProjectVersions {
-    const val openosrsVersion = "4.1.0"
+    const val openosrsVersion = "4.10.0"
     const val apiVersion = "^1.0.0"
 }
 
@@ -35,6 +35,7 @@ object Libraries {
         const val lombok = "1.18.10"
         const val pf4j = "3.2.0"
         const val slf4j = "1.7.30"
+        const val gson = "2.8.7"
     }
 
     const val guice = "com.google.inject:guice:${Versions.guice}:no_aop"
@@ -45,4 +46,5 @@ object Libraries {
     const val json = "org.json:json:20200518"
     const val jsoup = "org.jsoup:jsoup:1.13.1"
     const val okhttp = "com.squareup.okhttp3:okhttp:3.7.0"
+    const val gson = "com.google.code.gson:gson:${Versions.gson}"
 }
