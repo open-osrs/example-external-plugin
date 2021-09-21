@@ -1,14 +1,11 @@
 package com.tha23rd.eventCollector;
 
-import com.google.gson.Gson;
 import com.google.inject.Provides;
-import com.tha23rd.eventCollector.client.RsServiceClient;
-import com.tha23rd.eventCollector.events.ItemConsumed;
-import com.tha23rd.eventCollector.events.RsEvent;
-import java.util.Date;
+import com.tha23rd.eventCollector.eventhandlers.ItemConsumedHandler;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import org.pf4j.Extension;
@@ -27,6 +24,12 @@ public class EventCollectorPlugin extends Plugin
 	@Inject
 	private Client client;
 
+	@Inject
+	private EventBus eventBus;
+
+	@Inject
+	private ItemConsumedHandler itemConsumedHandler;
+
 	@Provides
 	EventCollectorConfig provideConfig(ConfigManager configManager)
 	{
@@ -36,19 +39,12 @@ public class EventCollectorPlugin extends Plugin
 	@Override
 	public void startUp() throws Exception
 	{
-		ItemConsumed itemConsumed = new ItemConsumed(435, new Date());
-		RsEvent<ItemConsumed> rsEvent = new RsEvent<>("itemConsumed", getPlayerId(), itemConsumed);
-		Gson gson = new Gson();
-		RsServiceClient.getClient(getApiUrl()).postEvent(gson.toJson(rsEvent));
+		System.out.println("Starting up");
+		this.eventBus.register(itemConsumedHandler);
 	}
-
-	private String getApiUrl()
+	@Override
+	public void shutDown() throws Exception
 	{
-		return config.apiurl();
-	}
-
-	private String getPlayerId()
-	{
-		return config.playerId();
+		this.eventBus.unregister(itemConsumedHandler);
 	}
 }

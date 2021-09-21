@@ -28,6 +28,7 @@ public class RsServiceClient
 	}
 
 	public void postEvent(String eventBody) {
+		System.out.println(eventBody);
 		RequestBody body = RequestBody.create(
 			MediaType.parse("application/json"), eventBody);
 
