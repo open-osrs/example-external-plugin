@@ -1,6 +1,7 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.ActionType;
 import static com.tha23rd.eventCollector.ActionType.CAST;
 import com.tha23rd.eventCollector.EventCollectorConfig;
@@ -239,7 +240,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 					if (!skipBone)
 					{
 						// TODO
-//						prayer.build();
+						prayer.build();
 					}
 				}
 				prayerXp = event.getXp();
@@ -1298,7 +1299,11 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 	@Override
 	void sendEvent(RsEvent<ItemConsumed> rsEvent)
 	{
-		Gson gson = new Gson();
-		RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
+		try {
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
+			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

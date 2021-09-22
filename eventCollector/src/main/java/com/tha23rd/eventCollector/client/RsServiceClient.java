@@ -37,6 +37,10 @@ public class RsServiceClient
 			.post(body)
 			.build();
 
+		System.out.println(request.url());
+		System.out.println(request.method());
+		System.out.println(request.body());
+
 		httpClient.newCall(request).enqueue(new Callback()
 		{
 			@Override
@@ -48,7 +52,7 @@ public class RsServiceClient
 			@Override
 			public void onResponse(Call call, Response response) throws IOException
 			{
-				System.out.println(response.body().string());
+				response.close();
 			}
 		});
 	}

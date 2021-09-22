@@ -6,9 +6,9 @@ import java.util.Date;
 public class ItemConsumed extends Timeable
 {
 	int item_id;
-	float price;
+	long price;
 
-	public ItemConsumed(float price, int item_id, Date timestamp)
+	public ItemConsumed(long price, int item_id, Date timestamp)
 	{
 		super(timestamp);
 		this.item_id = item_id;
