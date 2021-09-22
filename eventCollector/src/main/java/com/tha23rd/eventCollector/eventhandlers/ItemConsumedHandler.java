@@ -1093,7 +1093,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 				break;
 		}
 
-		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, new Date());
+		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count, new Date());
 		RsEvent<ItemConsumed> rsEvent = new RsEvent<>("itemConsumed", this.config.playerId(), itemConsumed);
 
 		sendEvent(rsEvent);
@@ -1143,7 +1143,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		calculatedPrice = (itemManager.getItemPrice(itemId));
 		calculatedPrice = scalePriceByDoses(name, itemId, calculatedPrice);
 
-		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, new Date());
+		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count, new Date());
 		RsEvent<ItemConsumed> rsEvent = new RsEvent<>("itemConsumed", this.config.playerId(), itemConsumed);
 
 		sendEvent(rsEvent);
