@@ -28,7 +28,6 @@ public class RsServiceClient
 	}
 
 	public void postEvent(String eventBody) {
-		System.out.println(eventBody);
 		RequestBody body = RequestBody.create(
 			MediaType.parse("application/json"), eventBody);
 
@@ -37,9 +36,27 @@ public class RsServiceClient
 			.post(body)
 			.build();
 
-		System.out.println(request.url());
-		System.out.println(request.method());
-		System.out.println(request.body());
+		httpClient.newCall(request).enqueue(new Callback()
+		{
+			@Override
+			public void onFailure(Call call, IOException e)
+			{
+				e.printStackTrace();
+			}
+
+			@Override
+			public void onResponse(Call call, Response response) throws IOException
+			{
+				response.close();
+			}
+		});
+	}
+
+	public void heartbeat(String playerId) {
+		Request request = new Request.Builder()
+			.url(BASE_URL + "/heartbeat/" + playerId)
+			.post(RequestBody.create(null, new byte[0]))
+			.build();
 
 		httpClient.newCall(request).enqueue(new Callback()
 		{

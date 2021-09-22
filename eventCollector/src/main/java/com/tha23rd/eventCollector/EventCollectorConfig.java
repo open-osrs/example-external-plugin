@@ -26,4 +26,14 @@ public interface EventCollectorConfig extends Config
 	{
 		return "";
 	}
+
+	@ConfigItem(
+		keyName = "playername",
+		name = "Player Name",
+		description = "The player name associated with events."
+	)
+	default String playerName()
+	{
+		return "";
+	}
 }
