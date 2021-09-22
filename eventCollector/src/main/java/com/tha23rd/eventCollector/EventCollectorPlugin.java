@@ -3,10 +3,11 @@ package com.tha23rd.eventCollector;
 import com.google.inject.Provides;
 import com.tha23rd.eventCollector.client.RsServiceClient;
 import com.tha23rd.eventCollector.eventhandlers.ItemConsumedHandler;
+import com.tha23rd.eventCollector.eventhandlers.LevelUpHandler;
+import com.tha23rd.eventCollector.eventhandlers.QuestCompletedHandler;
+import com.tha23rd.eventCollector.events.QuestCompleted;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -37,6 +38,12 @@ public class EventCollectorPlugin extends Plugin
 
 	@Inject
 	private ItemConsumedHandler itemConsumedHandler;
+
+	@Inject
+	private LevelUpHandler levelUpHandler;
+
+	@Inject
+	private QuestCompletedHandler questCompletedHandler;
 
 	private boolean heartbeatLoop = true;
 
@@ -74,7 +81,6 @@ public class EventCollectorPlugin extends Plugin
 						e.printStackTrace();
 					}
 				}
-
 			}
 		});
 	}
@@ -83,23 +89,24 @@ public class EventCollectorPlugin extends Plugin
 	public void startUp() throws Exception
 	{
 		System.out.println("Starting up");
-		// send heartbeat every 4 seconds
+		// send heartbeat every 4 minutes
 		sendHeartBeat(1000 * 60 * 4);
 		this.eventBus.register(itemConsumedHandler);
+		this.eventBus.register(levelUpHandler);
+		this.eventBus.register(questCompletedHandler);
 	}
 	@Override
 	public void shutDown() throws Exception
 	{
 		this.eventBus.unregister(itemConsumedHandler);
+		this.eventBus.unregister(levelUpHandler);
+		this.eventBus.unregister(questCompletedHandler);
 		this.heartbeatLoop = false;
 	}
 
 	@Subscribe
 	private void onGameStateChanged(final GameStateChanged event)
 	{
-		System.out.println(client.getLocalPlayer().getName());
-		System.out.println(event.getGameState().name());
-
 		if (event.getGameState() == GameState.LOGGED_IN)
 		{
 			loggedIn = true;

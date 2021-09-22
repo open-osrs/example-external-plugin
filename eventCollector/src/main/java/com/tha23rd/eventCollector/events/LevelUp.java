@@ -7,8 +7,10 @@ public class LevelUp extends Timeable
 	int to_level;
 	String skill_name;
 
-	public LevelUp(Date timestamp)
+	public LevelUp(int toLevel, String skillName, Date timestamp)
 	{
 		super(timestamp);
+		this.to_level = toLevel;
+		this.skill_name = skillName;
 	}
 }

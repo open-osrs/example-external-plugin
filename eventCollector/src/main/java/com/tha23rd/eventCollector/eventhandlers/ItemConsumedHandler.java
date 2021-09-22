@@ -41,7 +41,6 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.events.VarbitChanged;
-import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.runepouch.Runes;
@@ -189,6 +188,8 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 	private boolean skipBone = false;
 	private int longTickWait = 0;
 	private int ensouledHeadId = 0;
+
+	private static final String EVENT_TYPE = "itemConsumed";
 
 	@Inject
 	public ItemConsumedHandler(Client client, EventCollectorConfig config) {
@@ -1094,7 +1095,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		}
 
 		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count, new Date());
-		RsEvent<ItemConsumed> rsEvent = new RsEvent<>("itemConsumed", this.config.playerId(), itemConsumed);
+		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, this.config.playerId(), itemConsumed);
 
 		sendEvent(rsEvent);
 	}
@@ -1144,7 +1145,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		calculatedPrice = scalePriceByDoses(name, itemId, calculatedPrice);
 
 		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count, new Date());
-		RsEvent<ItemConsumed> rsEvent = new RsEvent<>("itemConsumed", this.config.playerId(), itemConsumed);
+		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, this.config.playerId(), itemConsumed);
 
 		sendEvent(rsEvent);
 	}
