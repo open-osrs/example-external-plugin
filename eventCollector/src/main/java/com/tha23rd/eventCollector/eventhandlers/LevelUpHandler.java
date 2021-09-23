@@ -88,7 +88,7 @@ public class LevelUpHandler extends EventHandler<LevelUp>
 	}
 
 	@Override
-	void sendEvent(RsEvent rsEvent)
+	void sendEvent(RsEvent<LevelUp> rsEvent)
 	{
 		try {
 			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();

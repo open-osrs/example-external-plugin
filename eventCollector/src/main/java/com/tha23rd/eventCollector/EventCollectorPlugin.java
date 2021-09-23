@@ -4,6 +4,7 @@ import com.google.inject.Provides;
 import com.tha23rd.eventCollector.client.RsServiceClient;
 import com.tha23rd.eventCollector.eventhandlers.ItemConsumedHandler;
 import com.tha23rd.eventCollector.eventhandlers.LevelUpHandler;
+import com.tha23rd.eventCollector.eventhandlers.PlayerDeathHandler;
 import com.tha23rd.eventCollector.eventhandlers.QuestCompletedHandler;
 import com.tha23rd.eventCollector.events.QuestCompleted;
 import java.util.concurrent.Executor;
@@ -44,6 +45,9 @@ public class EventCollectorPlugin extends Plugin
 
 	@Inject
 	private QuestCompletedHandler questCompletedHandler;
+
+	@Inject
+	private PlayerDeathHandler playerDeathHandler;
 
 	private boolean heartbeatLoop = true;
 
@@ -94,6 +98,7 @@ public class EventCollectorPlugin extends Plugin
 		this.eventBus.register(itemConsumedHandler);
 		this.eventBus.register(levelUpHandler);
 		this.eventBus.register(questCompletedHandler);
+		this.eventBus.register(playerDeathHandler);
 	}
 	@Override
 	public void shutDown() throws Exception
@@ -101,6 +106,7 @@ public class EventCollectorPlugin extends Plugin
 		this.eventBus.unregister(itemConsumedHandler);
 		this.eventBus.unregister(levelUpHandler);
 		this.eventBus.unregister(questCompletedHandler);
+		this.eventBus.unregister(playerDeathHandler);
 		this.heartbeatLoop = false;
 	}
 
