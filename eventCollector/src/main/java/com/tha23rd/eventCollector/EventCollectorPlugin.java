@@ -92,7 +92,6 @@ public class EventCollectorPlugin extends Plugin
 	@Override
 	public void startUp() throws Exception
 	{
-		System.out.println("Starting up");
 		// send heartbeat every 4 minutes
 		sendHeartBeat(1000 * 60 * 4);
 		this.eventBus.register(itemConsumedHandler);
