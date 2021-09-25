@@ -50,7 +50,7 @@ public class QuestCompletedHandler extends EventHandler<QuestCompleted>
 			String text = client.getWidget(WidgetInfo.QUEST_COMPLETED_NAME_TEXT).getText();
 			String quest = parseQuestCompletedWidget(text);
 
-			QuestCompleted questCompleted = new QuestCompleted(quest.toLowerCase(), new Date());
+			QuestCompleted questCompleted = new QuestCompleted(quest.toLowerCase());
 			RsEvent<QuestCompleted> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), questCompleted);
 			sendEvent(rsEvent);
 		}

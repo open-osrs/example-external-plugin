@@ -1,11 +1,14 @@
 package com.tha23rd.eventCollector.events;
 
-import lombok.AllArgsConstructor;
+import java.util.Date;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RsEvent<T>
 {
-	String event_type;
-	String player_id;
-	T event_details;
+
+	final String event_type;
+	final String player_id;
+	final T event_details;
+	Date timestamp = new Date();
 }

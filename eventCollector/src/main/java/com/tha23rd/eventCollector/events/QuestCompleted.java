@@ -1,15 +1,9 @@
 package com.tha23rd.eventCollector.events;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
 
-public class QuestCompleted extends Timeable
+@AllArgsConstructor
+public class QuestCompleted
 {
-
 	String quest_name;
-
-	public QuestCompleted(String questName, Date timestamp)
-	{
-		super(timestamp);
-		this.quest_name = questName;
-	}
 }

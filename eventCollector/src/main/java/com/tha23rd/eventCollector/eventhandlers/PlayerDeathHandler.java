@@ -29,7 +29,7 @@ public class PlayerDeathHandler extends EventHandler<PlayerDeath>
 			return;
 		}
 
-		PlayerDeath playerDeath = new PlayerDeath(new Date(), client.getLocalPlayer().getWorldLocation());
+		PlayerDeath playerDeath = new PlayerDeath(client.getLocalPlayer().getWorldLocation());
 		RsEvent<PlayerDeath> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), playerDeath);
 		sendEvent(rsEvent);
 	}

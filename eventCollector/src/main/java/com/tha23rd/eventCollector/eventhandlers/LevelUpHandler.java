@@ -51,7 +51,7 @@ public class LevelUpHandler extends EventHandler<LevelUp>
 				int level = Integer.parseInt(skillLevelArray.get(1));
 				String skillName = skillLevelArray.get(0);
 
-				LevelUp levelUp = new LevelUp(level, skillName, new Date());
+				LevelUp levelUp = new LevelUp(level, skillName);
 				RsEvent<LevelUp> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), levelUp);
 				sendEvent(rsEvent);
 			}

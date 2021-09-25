@@ -1,17 +1,14 @@
 package com.tha23rd.eventCollector.events;
 
-import java.util.Date;
-
-public class LootDropped extends Timeable
+public class LootDropped
 {
 	int itemId;
 	String itemName;
 	int price;
 	boolean pet;
 
-	public LootDropped(int itemId, String itemName, int price, boolean pet, Date timestamp)
+	public LootDropped(int itemId, String itemName, int price, boolean pet)
 	{
-		super(timestamp);
 		this.itemId = itemId;
 		this.price = price;
 		this.itemName = itemName;
