@@ -1,15 +1,12 @@
 package com.tha23rd.eventCollector.events;
 
-import java.util.Date;
-
-public class LevelUp extends Timeable
+public class LevelUp
 {
 	int to_level;
 	String skill_name;
 
-	public LevelUp(int toLevel, String skillName, Date timestamp)
+	public LevelUp(int toLevel, String skillName)
 	{
-		super(timestamp);
 		this.to_level = toLevel;
 		this.skill_name = skillName;
 	}

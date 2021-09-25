@@ -72,7 +72,7 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 			{
 				gotPet = false;
 				petTicks = 0;
-				LootDropped lootDropped = new LootDropped(p.getPetID(), p.name(), -1, true, new Date());
+				LootDropped lootDropped = new LootDropped(p.getPetID(), p.name(), -1, true);
 				RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), lootDropped);
 				sendEvent(rsEvent);
 			}
@@ -82,7 +82,7 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 			uItems.forEach(uniqueItem -> {
 				if (uniqueItem.getItemID() == item.getId()) {
 					int price = itemManager.getItemPrice(item.getId());
-					LootDropped lootDropped = new LootDropped(item.getId(), uniqueItem.getName(), price, false, new Date());
+					LootDropped lootDropped = new LootDropped(item.getId(), uniqueItem.getName(), price, false);
 					RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), lootDropped);
 					sendEvent(rsEvent);
 				}
