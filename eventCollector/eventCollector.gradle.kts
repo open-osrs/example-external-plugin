@@ -1,6 +1,6 @@
 import ProjectVersions.openosrsVersion
 
-version = "0.0.1"
+version = "0.0.2"
 
 project.extra["PluginName"] = "Event Collection"
 project.extra["PluginDescription"] = "Collect events to be stored for later."

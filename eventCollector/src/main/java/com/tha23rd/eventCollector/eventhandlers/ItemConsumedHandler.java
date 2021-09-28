@@ -1296,15 +1296,4 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		}
 		return itemId;
 	}
-
-	@Override
-	void sendEvent(RsEvent<ItemConsumed> rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

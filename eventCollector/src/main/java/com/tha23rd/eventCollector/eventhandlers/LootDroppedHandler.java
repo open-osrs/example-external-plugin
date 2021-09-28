@@ -282,15 +282,4 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 		int[] regions = client.getMapRegions();
 		return Arrays.asList(regions).contains( NMZ_MAP_REGION) && client.getLocalPlayer().getWorldLocation().getPlane() > 0;
 	}
-
-	@Override
-	void sendEvent(RsEvent<LootDropped> rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

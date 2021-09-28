@@ -1,12 +1,8 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
 import com.tha23rd.eventCollector.events.PlayerDeath;
 import com.tha23rd.eventCollector.events.RsEvent;
-import java.util.Date;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.events.ActorDeath;
@@ -32,16 +28,5 @@ public class PlayerDeathHandler extends EventHandler<PlayerDeath>
 		PlayerDeath playerDeath = new PlayerDeath(client.getLocalPlayer().getWorldLocation());
 		RsEvent<PlayerDeath> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), playerDeath);
 		sendEvent(rsEvent);
-	}
-
-	@Override
-	void sendEvent(RsEvent<PlayerDeath> rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

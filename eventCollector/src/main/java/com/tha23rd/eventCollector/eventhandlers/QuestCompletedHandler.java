@@ -102,15 +102,4 @@ public class QuestCompletedHandler extends EventHandler<QuestCompleted>
 
 		return quest;
 	}
-
-	@Override
-	void sendEvent(RsEvent<QuestCompleted> rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

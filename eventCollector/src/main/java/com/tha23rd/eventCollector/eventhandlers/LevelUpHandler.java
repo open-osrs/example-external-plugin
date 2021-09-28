@@ -86,15 +86,4 @@ public class LevelUpHandler extends EventHandler<LevelUp>
 		String skillLevel = m.group(2);
 		return Arrays.asList(skillName, skillLevel);
 	}
-
-	@Override
-	void sendEvent(RsEvent<LevelUp> rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

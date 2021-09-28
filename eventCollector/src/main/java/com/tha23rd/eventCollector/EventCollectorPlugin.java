@@ -12,9 +12,15 @@ import com.tha23rd.eventCollector.events.QuestCompleted;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.client.chat.ChatColorType;
+import net.runelite.client.chat.ChatMessageBuilder;
+import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
@@ -28,6 +34,7 @@ import org.pf4j.Extension;
 	tags = {"utility", "data", "collection"}
 )
 @Extension
+@Slf4j
 public class EventCollectorPlugin extends Plugin
 {
 	@Inject
@@ -57,6 +64,9 @@ public class EventCollectorPlugin extends Plugin
 	@Inject
 	private GamerLoggedHandler gamerLoggedHandler;
 
+	@Inject
+	private ChatMessageManager chatMessageManager;
+
 	private boolean heartbeatLoop = true;
 
 	private boolean loggedIn = false;
@@ -72,7 +82,7 @@ public class EventCollectorPlugin extends Plugin
 		executor.execute(() -> {
 			while (heartbeatLoop) {
 				if (loggedIn && client.getLocalPlayer() != null && client.getLocalPlayer().getName() != null && client.getLocalPlayer().getName().equalsIgnoreCase(config.playerName())) {
-					System.out.println("Sending heartbeat");
+					sendChatMessage("Sending heartbeat");
 					RsServiceClient.getClient(this.config.apiurl()).heartbeat(config.playerId());
 					try
 					{
@@ -86,6 +96,7 @@ public class EventCollectorPlugin extends Plugin
 					// sleep for a shorter time
 					try
 					{
+						log.info("Logged in: " + loggedIn);
 						Thread.sleep(1000 * 10);
 					}
 					catch (InterruptedException e)
@@ -133,6 +144,20 @@ public class EventCollectorPlugin extends Plugin
 		{
 			loggedIn = false;
 		}
+	}
+
+	private void sendChatMessage(String chatMessage)
+	{
+		final String message = new ChatMessageBuilder()
+			.append(ChatColorType.HIGHLIGHT)
+			.append(chatMessage)
+			.build();
+
+		chatMessageManager.queue(
+			QueuedMessage.builder()
+				.type(ChatMessageType.CONSOLE)
+				.runeLiteFormattedMessage(message)
+				.build());
 	}
 
 }

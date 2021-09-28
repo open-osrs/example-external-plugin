@@ -85,15 +85,4 @@ public class GamerLoggedHandler extends EventHandler
 
 		return false;
 	}
-
-	@Override
-	void sendEvent(RsEvent rsEvent)
-	{
-		try {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").create();
-			RsServiceClient.getClient(this.config.apiurl()).postEvent(gson.toJson(rsEvent));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

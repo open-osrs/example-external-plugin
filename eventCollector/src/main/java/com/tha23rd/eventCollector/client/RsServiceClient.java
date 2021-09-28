@@ -1,6 +1,7 @@
 package com.tha23rd.eventCollector.client;
 
 import java.io.IOException;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -9,6 +10,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@Slf4j
 public class RsServiceClient
 {
 	private static RsServiceClient client;
@@ -35,6 +37,8 @@ public class RsServiceClient
 			.url(BASE_URL + "/runelite")
 			.post(body)
 			.build();
+
+		log.info("Sending event to: " + this.BASE_URL + " with contents: " + eventBody);
 
 		httpClient.newCall(request).enqueue(new Callback()
 		{
