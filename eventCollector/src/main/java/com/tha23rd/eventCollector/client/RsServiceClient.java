@@ -15,7 +15,7 @@ public class RsServiceClient
 {
 	private static RsServiceClient client;
 	private final OkHttpClient httpClient;
-	private final String BASE_URL;
+	private String BASE_URL;
 
 	private RsServiceClient(String baseUrl) {
 		this.httpClient = new OkHttpClient();
@@ -26,6 +26,7 @@ public class RsServiceClient
 		if (client == null)
 			client = new RsServiceClient(baseUrl);
 
+		client.BASE_URL = baseUrl;
 		return client;
 	}
 
