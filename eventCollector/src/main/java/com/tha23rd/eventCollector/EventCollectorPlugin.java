@@ -2,6 +2,7 @@ package com.tha23rd.eventCollector;
 
 import com.google.inject.Provides;
 import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.eventhandlers.BankOpenedHandler;
 import com.tha23rd.eventCollector.eventhandlers.GamerLoggedHandler;
 import com.tha23rd.eventCollector.eventhandlers.ItemConsumedHandler;
 import com.tha23rd.eventCollector.eventhandlers.LevelUpHandler;
@@ -67,6 +68,9 @@ public class EventCollectorPlugin extends Plugin
 	@Inject
 	private ChatMessageManager chatMessageManager;
 
+	@Inject
+	private BankOpenedHandler bankOpenedHandler;
+
 	private boolean heartbeatLoop = true;
 
 	private boolean loggedIn = false;
@@ -119,6 +123,7 @@ public class EventCollectorPlugin extends Plugin
 		this.eventBus.register(playerDeathHandler);
 		this.eventBus.register(lootDroppedHandler);
 		this.eventBus.register(gamerLoggedHandler);
+		this.eventBus.register(bankOpenedHandler);
 	}
 	@Override
 	public void shutDown() throws Exception
@@ -129,6 +134,7 @@ public class EventCollectorPlugin extends Plugin
 		this.eventBus.unregister(playerDeathHandler);
 		this.eventBus.unregister(lootDroppedHandler);
 		this.eventBus.unregister(gamerLoggedHandler);
+		this.eventBus.unregister(bankOpenedHandler);
 		this.heartbeatLoop = false;
 	}
 
