@@ -33,7 +33,8 @@ import org.pf4j.Extension;
 @PluginDescriptor(
 	name = "Event Collector",
 	description = "Collect all the events",
-	tags = {"utility", "data", "collection", "gimp"}
+	tags = {"utility", "data", "collection", "gimp"},
+	loadWhenOutdated = true
 )
 @Extension
 @Slf4j
