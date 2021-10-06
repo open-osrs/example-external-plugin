@@ -1,8 +1,7 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
-import net.runelite.client.game.ItemManager;
-
 import javax.inject.Singleton;
+import net.runelite.client.game.ItemManager;
 
 @Singleton
 public class Prayer

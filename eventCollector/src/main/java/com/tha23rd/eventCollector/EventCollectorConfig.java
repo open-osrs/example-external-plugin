@@ -4,9 +4,11 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("discordNotifier")
+@ConfigGroup("eventCollector")
 public interface EventCollectorConfig extends Config
 {
+	String CONFIG_GROUP = "eventCollector";
+
 	@ConfigItem(
 		keyName = "apiurl",
 		name = "API URL",

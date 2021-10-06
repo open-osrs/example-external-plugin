@@ -1,15 +1,12 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.ActionType;
 import static com.tha23rd.eventCollector.ActionType.CAST;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.ItemConsumed;
 import com.tha23rd.eventCollector.events.RsEvent;
 import java.util.ArrayDeque;
-import java.util.Date;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
@@ -192,8 +189,9 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 	private static final String EVENT_TYPE = "itemConsumed";
 
 	@Inject
-	public ItemConsumedHandler(Client client, EventCollectorConfig config) {
-		super(client, config);
+	public ItemConsumedHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
+	{
+		super(client, config, plugin);
 
 		this.prayer = new Prayer(this, itemManager);
 		this.farming = new Farming(this, itemManager);
@@ -276,7 +274,6 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 			}
 			ticks = 0;
 		}
-
 
 
 		skipBone = false;
@@ -608,7 +605,8 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 
 
 	@Subscribe
-	private void onChatMessage(ChatMessage event) {
+	private void onChatMessage(ChatMessage event)
+	{
 		String message = event.getMessage();
 
 		if (event.getType() == ChatMessageType.GAMEMESSAGE || event.getType() == ChatMessageType.SPAM)
@@ -617,13 +615,11 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 			{
 				farming.OnChatPlant(message.toLowerCase());
 			}
-
 			else if (message.toLowerCase().contains("you treat "))
 			{
 				farming.setEndlessBucket(message);
 				farming.OnChatTreat(message.toLowerCase());
 			}
-
 			else if (message.toLowerCase().contains("you bury the bones"))
 			{
 				prayer.OnChat(message);
@@ -681,7 +677,6 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 			{
 				cannonPlaced = true;
 			}
-
 			else if (event.getMessage().contains("You pick up the cannon")
 				|| event.getMessage().contains("Your cannon has decayed. Speak to Nulodion to get a new one!"))
 			{
@@ -1037,11 +1032,14 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		}
 		return percent;
 	}
-	protected void buildChargesEntries(int itemId) {
+
+	protected void buildChargesEntries(int itemId)
+	{
 		buildChargesEntries(itemId, 1);
 	}
 
-	protected void buildChargesEntries(int itemId, int count) {
+	protected void buildChargesEntries(int itemId, int count)
+	{
 		final ItemComposition itemComposition = itemManager.getItemComposition(itemId);
 		String name = itemComposition.getName();
 		long calculatedPrice = 0;
@@ -1095,16 +1093,18 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		}
 
 		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count);
-		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, this.config.playerId(), itemConsumed);
+		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, itemConsumed);
 
 		sendEvent(rsEvent);
 	}
 
-	protected void buildEntries(int itemId) {
+	protected void buildEntries(int itemId)
+	{
 		buildEntries(itemId, 1);
 	}
 
-	protected void buildEntries(int itemId, int count) {
+	protected void buildEntries(int itemId, int count)
+	{
 		final ItemComposition itemComposition = itemManager.getItemComposition(itemId);
 		String name = itemComposition.getName();
 		long calculatedPrice;
@@ -1145,7 +1145,7 @@ public class ItemConsumedHandler extends EventHandler<ItemConsumed>
 		calculatedPrice = scalePriceByDoses(name, itemId, calculatedPrice);
 
 		ItemConsumed itemConsumed = new ItemConsumed(calculatedPrice * count, itemId, count);
-		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, this.config.playerId(), itemConsumed);
+		RsEvent<ItemConsumed> rsEvent = new RsEvent<>(EVENT_TYPE, itemConsumed);
 
 		sendEvent(rsEvent);
 	}

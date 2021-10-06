@@ -1,15 +1,12 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.LootDropped;
 import com.tha23rd.eventCollector.events.RsEvent;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -28,9 +25,9 @@ import net.runelite.client.plugins.loottracker.LootReceived;
 @Slf4j
 public class LootDroppedHandler extends EventHandler<LootDropped>
 {
-	private static final String SIRE_FONT_TEXT = "you place the unsired into the font of consumption...";
-	private static final String SIRE_REWARD_TEXT = "the font consumes the unsired";
-	private static final int MAX_TEXT_CHECK = 25;
+	//private static final String SIRE_FONT_TEXT = "you place the unsired into the font of consumption...";
+	//private static final String SIRE_REWARD_TEXT = "the font consumes the unsired";
+	//private static final int MAX_TEXT_CHECK = 25;
 	private static final int MAX_PET_TICKS = 5;
 	private static final int NMZ_MAP_REGION = 9033;
 	// Kill count handling
@@ -42,18 +39,19 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 		"You feel something weird sneaking into your backpack.",
 		"You have a funny feeling like you would have been followed...");
 
-	private boolean unsiredReclaiming = false;
-	private int unsiredCheckCount = 0;
+	//private boolean unsiredReclaiming = false;
+	//private int unsiredCheckCount = 0;
 	// Some pets aren't handled (skilling pets) so reset gotPet after a few ticks
 	private int petTicks = 0;
 	private boolean gotPet = false;
 	private static final String EVENT_TYPE = "lootDropped";
 	@Inject
 	private ItemManager itemManager;
+
 	@Inject
-	public LootDroppedHandler(Client client, EventCollectorConfig config)
+	public LootDroppedHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 		System.out.println("LootHandler booted up");
 	}
 
@@ -73,17 +71,19 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 				gotPet = false;
 				petTicks = 0;
 				LootDropped lootDropped = new LootDropped(p.getPetID(), p.name(), -1, true);
-				RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), lootDropped);
+				RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, lootDropped);
 				sendEvent(rsEvent);
 			}
 		}
 		Collection<UniqueItem> uItems = UniqueItem.getUniquesForBoss(event.getName().toUpperCase());
-		for (ItemStack item: event.getItems()) {
+		for (ItemStack item : event.getItems())
+		{
 			uItems.forEach(uniqueItem -> {
-				if (uniqueItem.getItemID() == item.getId()) {
+				if (uniqueItem.getItemID() == item.getId())
+				{
 					int price = itemManager.getItemPrice(item.getId());
 					LootDropped lootDropped = new LootDropped(item.getId(), uniqueItem.getName(), price, false);
-					RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), lootDropped);
+					RsEvent<LootDropped> rsEvent = new RsEvent<>(EVENT_TYPE, lootDropped);
 					sendEvent(rsEvent);
 				}
 			});
@@ -274,12 +274,13 @@ public class LootDroppedHandler extends EventHandler<LootDropped>
 	 */
 	private boolean isInNightmareZone()
 	{
-		if (client.getLocalPlayer() == null) {
+		if (client.getLocalPlayer() == null)
+		{
 			return false;
 		}
 
 		// It seems that KBD shares the map region with NMZ but NMZ is never in plane 0.
 		int[] regions = client.getMapRegions();
-		return Arrays.asList(regions).contains( NMZ_MAP_REGION) && client.getLocalPlayer().getWorldLocation().getPlane() > 0;
+		return Arrays.asList(regions).contains(NMZ_MAP_REGION) && client.getLocalPlayer().getWorldLocation().getPlane() > 0;
 	}
 }

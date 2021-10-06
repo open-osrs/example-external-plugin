@@ -1,6 +1,7 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
 import com.tha23rd.eventCollector.EventCollectorConfig;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.PlayerDeath;
 import com.tha23rd.eventCollector.events.RsEvent;
 import javax.inject.Inject;
@@ -11,10 +12,11 @@ import net.runelite.client.eventbus.Subscribe;
 public class PlayerDeathHandler extends EventHandler<PlayerDeath>
 {
 	private static final String EVENT_TYPE = "playerDeath";
+
 	@Inject
-	public PlayerDeathHandler(Client client, EventCollectorConfig config)
+	public PlayerDeathHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 	}
 
 	@Subscribe
@@ -26,7 +28,7 @@ public class PlayerDeathHandler extends EventHandler<PlayerDeath>
 		}
 
 		PlayerDeath playerDeath = new PlayerDeath(client.getLocalPlayer().getWorldLocation());
-		RsEvent<PlayerDeath> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), playerDeath);
+		RsEvent<PlayerDeath> rsEvent = new RsEvent<>(EVENT_TYPE, playerDeath);
 		sendEvent(rsEvent);
 	}
 }

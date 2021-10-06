@@ -1,6 +1,7 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
 import com.tha23rd.eventCollector.EventCollectorConfig;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.BankItem;
 import com.tha23rd.eventCollector.events.BankOpened;
 import com.tha23rd.eventCollector.events.RsEvent;
@@ -23,18 +24,21 @@ public class BankOpenedHandler extends EventHandler<BankOpened>
 	@Inject
 	ItemManager itemManager;
 	private static final String EVENT_TYPE = "bankOpened";
+
 	@Inject
-	public BankOpenedHandler(Client client, EventCollectorConfig config)
+	public BankOpenedHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 	}
 
 	@Subscribe
 	public void onWidgetLoaded(WidgetLoaded event)
 	{
-		if (event.getGroupId() == WidgetID.BANK_GROUP_ID) {
+		if (event.getGroupId() == WidgetID.BANK_GROUP_ID)
+		{
 			ItemContainer bankContainer = client.getItemContainer(InventoryID.BANK);
-			if (bankContainer != null) {
+			if (bankContainer != null)
+			{
 				int bankValue = 0;
 				final List<BankItem> cachedItems = new ArrayList<>(bankContainer.getItems().length);
 				for (Item item : bankContainer.getItems())
@@ -49,9 +53,11 @@ public class BankOpenedHandler extends EventHandler<BankOpened>
 				}
 				BankItem[] bankItemsArray = new BankItem[cachedItems.size()];
 				BankOpened bankOpened = new BankOpened(false, cachedItems.toArray(bankItemsArray), bankValue);
-				RsEvent<BankOpened> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), bankOpened);
+				RsEvent<BankOpened> rsEvent = new RsEvent<>(EVENT_TYPE, bankOpened);
 				sendEvent(rsEvent);
-			} else {
+			}
+			else
+			{
 				log.info("Bank container is null for some reason!");
 			}
 		}

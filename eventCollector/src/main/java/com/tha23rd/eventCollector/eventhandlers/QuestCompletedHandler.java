@@ -1,23 +1,16 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.QuestCompleted;
 import com.tha23rd.eventCollector.events.RsEvent;
-import java.awt.Image;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
-import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
 import static net.runelite.api.widgets.WidgetID.QUEST_COMPLETED_GROUP_ID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
@@ -33,15 +26,18 @@ public class QuestCompletedHandler extends EventHandler<QuestCompleted>
 	boolean parseQuest = false;
 
 	@Inject
-	public QuestCompletedHandler(Client client, EventCollectorConfig config)
+	public QuestCompletedHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick gameTick) {
+	public void onGameTick(GameTick gameTick)
+	{
 		if (!parseQuest)
+		{
 			return;
+		}
 
 		parseQuest = false;
 
@@ -51,7 +47,7 @@ public class QuestCompletedHandler extends EventHandler<QuestCompleted>
 			String quest = parseQuestCompletedWidget(text);
 
 			QuestCompleted questCompleted = new QuestCompleted(quest.toLowerCase());
-			RsEvent<QuestCompleted> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), questCompleted);
+			RsEvent<QuestCompleted> rsEvent = new RsEvent<>(EVENT_TYPE, questCompleted);
 			sendEvent(rsEvent);
 		}
 	}

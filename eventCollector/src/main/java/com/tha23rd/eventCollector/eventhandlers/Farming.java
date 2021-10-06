@@ -1,9 +1,8 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
+import javax.inject.Singleton;
 import static net.runelite.api.ItemID.*;
 import net.runelite.client.game.ItemManager;
-
-import javax.inject.Singleton;
 
 @Singleton
 public class Farming
@@ -33,9 +32,9 @@ public class Farming
 
 		String name = itemManager.getItemComposition(plantId).getName().toLowerCase();
 
-		if ( name.contains(" seed") || name.contains(" sapling"))
+		if (name.contains(" seed") || name.contains(" sapling"))
 		{
-			for (int seedId: ALLOTMENT_SEEDS)
+			for (int seedId : ALLOTMENT_SEEDS)
 			{
 				if (plantId == seedId)
 				{

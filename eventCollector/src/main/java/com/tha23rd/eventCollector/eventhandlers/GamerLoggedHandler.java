@@ -1,9 +1,7 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.RsEvent;
 import java.time.Duration;
 import java.time.Instant;
@@ -24,16 +22,17 @@ public class GamerLoggedHandler extends EventHandler
 
 
 	@Inject
-	public GamerLoggedHandler(Client client, EventCollectorConfig config)
+	public GamerLoggedHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 	}
 
 	@Subscribe
-	private void onGameTick(GameTick gameTick) {
+	private void onGameTick(GameTick gameTick)
+	{
 		if (check6hrLogout())
 		{
-			RsEvent rsEvent = new RsEvent(EVENT_TYPE, config.playerId(), null);
+			RsEvent rsEvent = new RsEvent(EVENT_TYPE, null);
 			sendEvent(rsEvent);
 		}
 	}

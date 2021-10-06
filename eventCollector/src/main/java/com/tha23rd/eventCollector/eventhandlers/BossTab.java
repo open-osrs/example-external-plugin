@@ -30,26 +30,26 @@ public enum BossTab
 	VORKATH("Vorkath", ItemID.VORKI, "Other", LootRecordType.NPC),
 
 	// God wars dungeon
-	KREEARRA("Kree'arra", ItemID.PET_KREEARRA , "God Wars Dungeon", LootRecordType.NPC,
+	KREEARRA("Kree'arra", ItemID.PET_KREEARRA, "God Wars Dungeon", LootRecordType.NPC,
 		ImmutableSet.of("Wingman Skree", "Flockleader Geerin", "Flight Kilisa")),
-	GENERAL_GRAARDOR("General Graardor", ItemID.PET_GENERAL_GRAARDOR , "God Wars Dungeon", LootRecordType.NPC,
+	GENERAL_GRAARDOR("General Graardor", ItemID.PET_GENERAL_GRAARDOR, "God Wars Dungeon", LootRecordType.NPC,
 		ImmutableSet.of("Sergeant Strongstack", "Sergeant Steelwill", "Sergeant Grimspike")),
-	COMMANDER_ZILYANA("Commander Zilyana", ItemID.PET_ZILYANA , "God Wars Dungeon", LootRecordType.NPC,
+	COMMANDER_ZILYANA("Commander Zilyana", ItemID.PET_ZILYANA, "God Wars Dungeon", LootRecordType.NPC,
 		ImmutableSet.of("Growler", "Bree", "Starlight")),
-	KRIL_TSUTSAROTH("K'ril Tsutsaroth", ItemID.PET_KRIL_TSUTSAROTH , "God Wars Dungeon", LootRecordType.NPC,
+	KRIL_TSUTSAROTH("K'ril Tsutsaroth", ItemID.PET_KRIL_TSUTSAROTH, "God Wars Dungeon", LootRecordType.NPC,
 		ImmutableSet.of("Balfrug Kreeyath", "Tstanon Karlak", "Zakl'n Gritch")),
 
 	// Wildy Bosses
-	VETION("Vet'ion Reborn", ItemID.VETION_JR , "Wilderness", LootRecordType.NPC, "Vet'ion"),
-	VENENATIS("Venenatis", ItemID.VENENATIS_SPIDERLING , "Wilderness", LootRecordType.NPC),
-	CALLISTO("Callisto", ItemID.CALLISTO_CUB , "Wilderness", LootRecordType.NPC),
-	CHAOS_ELEMENTAL("Chaos Elemental", ItemID.PET_CHAOS_ELEMENTAL , "Wilderness", LootRecordType.NPC),
+	VETION("Vet'ion Reborn", ItemID.VETION_JR, "Wilderness", LootRecordType.NPC, "Vet'ion"),
+	VENENATIS("Venenatis", ItemID.VENENATIS_SPIDERLING, "Wilderness", LootRecordType.NPC),
+	CALLISTO("Callisto", ItemID.CALLISTO_CUB, "Wilderness", LootRecordType.NPC),
+	CHAOS_ELEMENTAL("Chaos Elemental", ItemID.PET_CHAOS_ELEMENTAL, "Wilderness", LootRecordType.NPC),
 	// Wildy Demi-Bosses
 	SCORPIA("Scorpia", ItemID.SCORPIAS_OFFSPRING, "Wilderness", LootRecordType.NPC),
-	CHAOS_FANATIC("Chaos Fanatic", ItemID.ANCIENT_STAFF , "Wilderness", LootRecordType.NPC),
-	CRAZY_ARCHAEOLOGIST("Crazy Archaeologist", ItemID.FEDORA , "Wilderness", LootRecordType.NPC),
+	CHAOS_FANATIC("Chaos Fanatic", ItemID.ANCIENT_STAFF, "Wilderness", LootRecordType.NPC),
+	CRAZY_ARCHAEOLOGIST("Crazy Archaeologist", ItemID.FEDORA, "Wilderness", LootRecordType.NPC),
 	// Wildy Other
-	KING_BLACK_DRAGON("King Black Dragon", ItemID.PRINCE_BLACK_DRAGON , "Wilderness", LootRecordType.NPC),
+	KING_BLACK_DRAGON("King Black Dragon", ItemID.PRINCE_BLACK_DRAGON, "Wilderness", LootRecordType.NPC),
 
 	// Slayer Bosses
 	KALPHITE_QUEEN("Kalphite Queen", ItemID.KALPHITE_PRINCESS, "Other", LootRecordType.NPC),
@@ -115,6 +115,7 @@ public enum BossTab
 
 	private static final Map<String, BossTab> NAME_MAP;
 	private static final Multimap<String, BossTab> CATEGORY_MAP;
+
 	static
 	{
 		final ImmutableMap.Builder<String, BossTab> byName = ImmutableMap.builder();
@@ -122,7 +123,8 @@ public enum BossTab
 
 		for (BossTab tab : values())
 		{
-			for (final String name : tab.getAliases()) {
+			for (final String name : tab.getAliases())
+			{
 				byName.put(name.toUpperCase(), tab);
 			}
 			categoryMap.put(tab.getCategory(), tab);

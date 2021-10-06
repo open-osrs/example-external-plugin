@@ -886,6 +886,7 @@ public enum UniqueItem
 	private int qty;
 
 	private static final ImmutableMultimap<String, UniqueItem> BOSS_MAP;
+
 	static
 	{
 		final ImmutableMultimap.Builder<String, UniqueItem> map = ImmutableMultimap.builder();

@@ -1,16 +1,11 @@
 package com.tha23rd.eventCollector.eventhandlers;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tha23rd.eventCollector.EventCollectorConfig;
-import com.tha23rd.eventCollector.client.RsServiceClient;
+import com.tha23rd.eventCollector.EventCollectorPlugin;
 import com.tha23rd.eventCollector.events.LevelUp;
 import com.tha23rd.eventCollector.events.RsEvent;
-import java.awt.Image;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -19,7 +14,6 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.widgets.Widget;
 import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
-import static net.runelite.api.widgets.WidgetID.QUEST_COMPLETED_GROUP_ID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.eventbus.Subscribe;
 
@@ -29,17 +23,20 @@ public class LevelUpHandler extends EventHandler<LevelUp>
 	boolean parseLevelUp = false;
 	private static final Pattern LEVEL_UP_PATTERN = Pattern.compile(".*Your ([a-zA-Z]+) (?:level is|are)? now (\\d+)\\.");
 	private static final String EVENT_TYPE = "levelUp";
+
 	@Inject
-	public LevelUpHandler(Client client, EventCollectorConfig config)
+	public LevelUpHandler(Client client, EventCollectorConfig config, EventCollectorPlugin plugin)
 	{
-		super(client, config);
+		super(client, config, plugin);
 	}
 
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
 		if (!parseLevelUp)
+		{
 			return;
+		}
 
 		parseLevelUp = false;
 		if (client.getWidget(WidgetInfo.LEVEL_UP_LEVEL) != null)
@@ -52,7 +49,7 @@ public class LevelUpHandler extends EventHandler<LevelUp>
 				String skillName = skillLevelArray.get(0);
 
 				LevelUp levelUp = new LevelUp(level, skillName);
-				RsEvent<LevelUp> rsEvent = new RsEvent<>(EVENT_TYPE, config.playerId(), levelUp);
+				RsEvent<LevelUp> rsEvent = new RsEvent<>(EVENT_TYPE, levelUp);
 				sendEvent(rsEvent);
 			}
 		}

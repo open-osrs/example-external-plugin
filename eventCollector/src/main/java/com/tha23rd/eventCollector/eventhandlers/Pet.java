@@ -48,10 +48,10 @@ public enum Pet
 	// Pretty sure
 	PHOENIX(ItemID.PHOENIX, BossTab.WINTERTODT.getName()),
 	PET_PENANCE_QUEEN(ItemID.PET_PENANCE_QUEEN, "Barbarian Assault"),
-	TINY_TEMPOR(ItemID.TINY_TEMPOR, BossTab.TEMPOROSS.getName())
-	;
+	TINY_TEMPOR(ItemID.TINY_TEMPOR, BossTab.TEMPOROSS.getName());
 
 	private static final ImmutableMap<String, Pet> BOSS_MAP;
+
 	static
 	{
 		final ImmutableMap.Builder<String, Pet> byName = ImmutableMap.builder();
