@@ -58,8 +58,6 @@ public class CustomOneClickPlugin
 			event.setOption("Fish");
 			event.setOpcode(MenuAction.NPC_FIRST_OPTION.getId());
 			event.setIdentifier(spot.getIndex());
-			event.setParam0(0);
-			event.setParam1(0);
 		}
 	}
 
@@ -85,8 +83,6 @@ public class CustomOneClickPlugin
 			entryToSwap.setOption("Fish");
 			entryToSwap.setOpcode(MenuAction.NPC_FIRST_OPTION.getId());
 			entryToSwap.setIdentifier(spot.getIndex());
-			entryToSwap.setParam0(0);
-			entryToSwap.setParam1(0);
 		}
 		client.setLeftClickMenuEntry(entryToSwap);
 		event.setMenuEntry(entryToSwap);
