@@ -27,6 +27,7 @@ rootProject.name = "external plugins example"
 
 include(":discordNotifier")
 include(":eventCollector")
+include(":customOneClick")
 
 for (project in rootProject.children) {
     project.apply {
