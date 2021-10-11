@@ -18,8 +18,19 @@ import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDescriptor;
+import org.pf4j.Extension;
 
-public class CustomOneClickPlugin
+
+@PluginDescriptor(
+	name = "Custom One Click",
+	description = "Nice clicks!",
+	tags = {"utility", "data", "collection", "gimp"},
+	loadWhenOutdated = true
+)
+@Extension
+public class CustomOneClickPlugin extends Plugin
 {
 
 	@Inject
@@ -44,27 +55,26 @@ public class CustomOneClickPlugin
 
 	final private Set<Integer> fishingPoles = new HashSet<>(Arrays.asList(ItemID.BARBARIAN_ROD, ItemID.OILY_FISHING_ROD));
 
-	@Subscribe
-	private void onMenuEntryAdded(MenuEntryAdded event)
-	{
-		MenuEntry entryToSwap = new MenuEntry();
-		if (config.getFishingSpot() && event.getMenuAction().getId() == MenuAction.ITEM_USE.getId() && fishingPoles.contains(event.getId()))
-		{
-			NPC spot = findNearestFishingSpot(event.getIdentifier());
-			if (spot == null)
-			{
-				return;
-			}
-			event.setOption("Fish");
-			event.setOpcode(MenuAction.NPC_FIRST_OPTION.getId());
-			event.setIdentifier(spot.getIndex());
-		}
-	}
+//	@Subscribe
+//	private void onMenuEntryAdded(MenuEntryAdded event)
+//	{
+//		MenuEntry entryToSwap = new MenuEntry();
+//		if (config.getFishingSpot() && event.getMenuAction().getId() == MenuAction.ITEM_USE.getId() && fishingPoles.contains(event.getId()))
+//		{
+//			NPC spot = findNearestFishingSpot(event.getIdentifier());
+//			if (spot == null)
+//			{
+//				return;
+//			}
+//			event.setOption("Fish");
+//			event.setOpcode(MenuAction.NPC_FIRST_OPTION.getId());
+//			event.setIdentifier(spot.getIndex());
+//		}
+//	}
 
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		MenuEntry entryToSwap = new MenuEntry();
 		if (tick)
 		{
 			// only needed for one tick shit
@@ -80,12 +90,9 @@ public class CustomOneClickPlugin
 				return;
 			}
 
-			entryToSwap.setOption("Fish");
-			entryToSwap.setOpcode(MenuAction.NPC_FIRST_OPTION.getId());
-			entryToSwap.setIdentifier(spot.getIndex());
+			final MenuEntry open = new MenuEntry("Use-rod", "Use-rod", spot.getIndex(), MenuAction.NPC_FIRST_OPTION.getId(), 0, 0, false);
+			event.setMenuEntry(open);
 		}
-		client.setLeftClickMenuEntry(entryToSwap);
-		event.setMenuEntry(entryToSwap);
 	}
 
 	@Subscribe

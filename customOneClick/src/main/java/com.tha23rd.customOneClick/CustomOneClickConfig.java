@@ -4,7 +4,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
-@ConfigGroup("eventCollector")
+@ConfigGroup("customOneClick")
 public interface CustomOneClickConfig extends Config
 {
 	@ConfigItem(
