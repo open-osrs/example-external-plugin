@@ -24,6 +24,18 @@ import ProjectVersions.openosrsVersion
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+buildscript {
+    repositories {
+        maven {
+            url = uri("https://raw.githubusercontent.com/open-osrs/hosting/master")
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("com.openosrs:oprs-script-assembler:1.0.0")
+    }
+}
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.61"
@@ -68,5 +80,15 @@ tasks {
                     "Plugin-License" to project.extra["PluginLicense"]
             ))
         }
+    }
+
+    register<com.openosrs.script.ScriptAssemblerTask>("assembleScripts") {
+        scriptDirectory = "$buildDir/../scripts"
+        outputDirectory = "$buildDir/scripts"
+    }
+
+    processResources {
+        dependsOn("assembleScripts")
+        from(getByName<com.openosrs.script.ScriptAssemblerTask>("assembleScripts").outputDirectory)
     }
 }
