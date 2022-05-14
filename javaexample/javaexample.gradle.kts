@@ -33,7 +33,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath("com.openosrs:oprs-script-assembler:1.0.0")
+        classpath("com.openosrs:oprs-script-assembler:1.0.1")
     }
 }
 
