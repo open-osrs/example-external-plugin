@@ -33,7 +33,7 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        //classpath("com.openosrs:oprs-script-assembler:1.0.0")
+        classpath("com.openosrs:oprs-script-assembler:1.0.0")
     }
 }
 
@@ -68,7 +68,7 @@ tasks {
         }
     }
 
-    /*register<com.openosrs.script.ScriptAssemblerTask>("assembleScripts") {
+    register<com.openosrs.script.ScriptAssemblerTask>("assembleScripts") {
         scriptDirectory = "$buildDir/../scripts"
         outputDirectory = "$buildDir/scripts"
     }
@@ -76,5 +76,5 @@ tasks {
     processResources {
         dependsOn("assembleScripts")
         from(getByName<com.openosrs.script.ScriptAssemblerTask>("assembleScripts").outputDirectory)
-    }*/
+    }
 }
